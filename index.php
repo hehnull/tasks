@@ -5,7 +5,7 @@ $originalArray=[1,2,3,4,5];
 function array_map_user($numbers, $innerFunction){
     $newArray=[];
     foreach ($numbers as $number){
-        array_push($newArray,$innerFunction($number));
+        $newArray[]=$innerFunction($number);
     }
     return $newArray;
 }
