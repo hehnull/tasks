@@ -1,16 +1,16 @@
 <?php
 
-$myarray=[];
+$originalArray=[1,2,3,4,5];
 
 function array_map_user($numbers, $innerFunction){
-    $newarray =[];
+    $newArray=[];
     foreach ($numbers as $number){
-        $innerFunction($number);
+        array_push($newArray,$innerFunction($number));
     }
-    $newarray=$number;
-    return $newarray;
+    return $newArray;
 }
 
 $innerFunction = function($n){
     return $n*$n;
 };
+print_r(array_map_user($originalArray,$innerFunction));
