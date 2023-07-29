@@ -15,7 +15,7 @@ function array_reduce_user($numbers, $operator){
 function mult($a, $b){
     return $a * $b;
 }*/
-
+//dsadsad
 print_r(array_reduce_user($originalArray, fn ($a, $b) => $a + $b));
 echo "  ";
 print_r(array_reduce_user($originalArray,fn ($a, $b) => $a * $b));
