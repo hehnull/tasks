@@ -144,29 +144,59 @@ $movies = [
     ]
 ];
 
-displayMovies(checkAge(),$movies);
 
-function displayMovies($verify, $movies){
-    $numberMovie=0;
-    foreach ($movies as $movie){
-        if($movie["age_restriction"] <= $verify){
-            $numberMovie = $numberMovie + 1;
-            echo "${numberMovie}. ";
-            foreach ($movie as $infoField => $value) {
-                if($infoField=="title"){
-                        echo "$value ";
-                }else if($infoField=="release_year"){
-                        echo "($value), ";
-                }else if($infoField=="age_restriction"){
-                        echo "$value+. ";
-                }else if($infoField=="rating"){
-                        echo "Rating - $value";
-                }
-            }
-            echo "\n";
+
+while (true)
+{
+    $userAge = readline("Здравствуйте, введите свой возраст:" . "\n");
+    if (!verifyAge($userAge))
+    {
+        echo "\nДанные некорректны\n\n";
+    }
+    else
+    {
+        $filteredMovies = filterMoviesByAgeRestriction($movies, $userAge);
+        displayMovies($filteredMovies);
+        break;
+    }
+}
+
+function verifyAge($typedAge): bool
+{
+    if (is_numeric($typedAge) && (int)$typedAge != 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function displayMovies($filteredMovies): void
+{
+    $numberMovie = 0;
+    foreach ($filteredMovies as $movie)
+    {
+        $numberMovie = $numberMovie + 1;
+        displayMovie($movie, $numberMovie);
+    }
+}
+
+function displayMovie($movie, $moviePosition): void
+{
+    echo "${moviePosition}. {$movie["title"]} ({$movie["release_year"]}), {$movie["age_restriction"]}+. Rating - {$movie["rating"]}\n";
+}
+
+function filterMoviesByAgeRestriction($initialMoviesList, $userAge): array
+{
+    $sortedMovies = [];
+    foreach ($initialMoviesList as $movie)
+    {
+        if ($movie["age_restriction"] <= $userAge)
+        {
+            $sortedMovies[] = $movie;
         }
     }
-};
-function checkAge(){
-    return (int)$age=readline("Здравствуйте, введите свой возраст:"."\n");
-};
+    return $sortedMovies;
+}
