@@ -1,11 +1,18 @@
-CREATE TABLE IF NOT EXISTS director
+CREATE TABLE IF NOT EXISTS director3
 (
     ID int not null auto_increment,
     NAME varchar(500) not null,
-    PRIMARY KEY (ID)
-);
+    PRIMARY KEY (ID),
+    MOVIE_ID int,
 
-CREATE TABLE movie
+    FOREIGN KEY FK_DIRECTOR_MOVIE (MOVIE_ID)
+        REFERENCES movie3(ID)
+);
+SELECT *
+    from movie_people mp1 inner join movie_people mp2 on mp1.movie_id = mp2.movie_id and mp1.people_id=mp2.people_id;
+
+SELECT * FROM (movie_people);
+CREATE TABLE movie3
 (
     ID int not null auto_increment,
     TITLE varchar(500) not null,
@@ -14,14 +21,10 @@ CREATE TABLE movie
     MIN_AGE int,
     RATING int,
 
-    DIRECTOR_ID int,
-
-    PRIMARY KEY (ID),
-    FOREIGN KEY FK_MOVIE_DIRECTOR (DIRECTOR_ID)
-        REFERENCES director(ID)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
+    PRIMARY KEY (ID)
 );
+SELECT *
+    from movie_people mp1 inner join movie_people mp2 on mp1.movie_id = mp2.movie_id and mp1.people_id=mp2.people_id;
 
 CREATE TABLE actor
 (
@@ -108,6 +111,7 @@ CREATE TABLE movieTitles
     MOVIETITLE varchar(500),
     LANG_ID char(3) not null,
 
+    PRIMARY KEY (MOVIE_ID, LANG_ID),
     FOREIGN KEY FK_MOVIETITLES_LANGDIRECTORY (LANG_ID)
         REFERENCES langDirectory (ID),
     FOREIGN KEY FK_MOVIETITLES_MOVIE (MOVIE_ID)
@@ -123,3 +127,119 @@ ALTER TABLE movie DROP COLUMN TITLE;
 /*ALTER TABLE movieTitles MODIFY ID INT NOT NULL;*/
 DROP TABLE movieTitles;
 
+SELECT
+        DIRECTOR_ID,
+        NAME
+FROM movie INNER JOIN director on movie.DIRECTOR_ID = director.ID;
+
+SELECT
+        DIRECTOR_ID,
+        d.NAME,
+        COUNT(movie.ID) as Total
+FROM movie INNER JOIN director d on movie.DIRECTOR_ID = d.ID
+GROUP BY DIRECTOR_ID, d.NAME;
+
+SELECT * FROM actor;
+
+
+SELECT
+
+    COUNT(m.ID)
+FROM movie m LEFT JOIN movieTitles mT on m.ID = mT.MOVIE_ID AND mT.LANG_ID='en'
+WHERE MOVIETITLE is null;
+
+INSERT INTO movieTitles (MOVIE_ID, MOVIETITLE, LANG_ID) VALUES (2, 'Чужой', 'ru'),
+                                                         (4, 'Сияние', 'ru'), (5, 'Avatar', 'en');
+
+SELECT ID
+FROM movie m
+WHERE NOT EXISTS(
+    SELECT 'x' FROM movieTitles WHERE LANG_ID='en' AND MOVIE_ID=ID
+    )
+
+DROP TABLE movieTitles;
+
+SELECT m.ID, mT.MOVIETITLE
+FROM movie m
+INNER JOIN movieTitles mT on m.ID = mT.MOVIE_ID
+INNER JOIN movie_actor ma on m.ID = ma.MOVIE_ID
+INNER JOIN actor a on ma.ACTOR_ID = a.ID
+WHERE LANG_ID = 'ru'
+AND a.NAME = 'Арнольд Шварценеггер';
+
+SELECT * FROM movie_actor;
+
+INSERT INTO movie_actor (MOVIE_ID, ACTOR_ID)
+VALUES (1, 1), (1, 2), (1, 3),
+       (2, 4), (2, 5), (2, 6),
+       (3, 7), (3, 8), (3, 9),
+       (4, 10),
+       (5, 11), (5, 12), (5, 4);
+
+SELECT
+    m.ID,
+    mt.movietitle,
+    COUNT(ma.ACTOR_ID)
+FROM movie m
+INNER JOIN movie_actor ma on m.ID = ma.MOVIE_ID
+INNER JOIN movieTitles mT on m.ID = mT.MOVIE_ID
+WHERE mt.LANG_ID = 'ru'
+GROUP BY 1,2
+SELECT
+        DIRECTOR_ID,
+        NAME
+FROM movie INNER JOIN director on movie.DIRECTOR_ID = director.ID;
+
+SELECT
+        DIRECTOR_ID,
+        d.NAME,
+        COUNT(movie.ID) as Total
+FROM movie INNER JOIN director d on movie.DIRECTOR_ID = d.ID
+GROUP BY DIRECTOR_ID, d.NAME;
+
+SELECT * FROM actor;
+
+
+SELECT
+
+    COUNT(m.ID)
+FROM movie m LEFT JOIN movieTitles mT on m.ID = mT.MOVIE_ID AND mT.LANG_ID='en'
+WHERE MOVIETITLE is null;
+
+INSERT INTO movieTitles (MOVIE_ID, MOVIETITLE, LANG_ID) VALUES (2, 'Чужой', 'ru'),
+                                                         (4, 'Сияние', 'ru'), (5, 'Avatar', 'en');
+
+SELECT ID
+FROM movie m
+WHERE NOT EXISTS(
+    SELECT 'x' FROM movieTitles WHERE LANG_ID='en' AND MOVIE_ID=ID
+    )
+
+DROP TABLE movieTitles;
+
+SELECT m.ID, mT.MOVIETITLE
+FROM movie m
+INNER JOIN movieTitles mT on m.ID = mT.MOVIE_ID
+INNER JOIN movie_actor ma on m.ID = ma.MOVIE_ID
+INNER JOIN actor a on ma.ACTOR_ID = a.ID
+WHERE LANG_ID = 'ru'
+AND a.NAME = 'Арнольд Шварценеггер';
+
+SELECT * FROM movie_actor;
+
+INSERT INTO movie_actor (MOVIE_ID, ACTOR_ID)
+VALUES (1, 1), (1, 2), (1, 3),
+       (2, 4), (2, 5), (2, 6),
+       (3, 7), (3, 8), (3, 9),
+       (4, 10),
+       (5, 11), (5, 12), (5, 4);
+
+SELECT
+    m.ID,
+    mt.movietitle,
+    COUNT(ma.ACTOR_ID)
+FROM movie m
+INNER JOIN movie_actor ma on m.ID = ma.MOVIE_ID
+INNER JOIN movieTitles mT on m.ID = mT.MOVIE_ID
+WHERE mt.LANG_ID = 'ru'
+GROUP BY 1,2
