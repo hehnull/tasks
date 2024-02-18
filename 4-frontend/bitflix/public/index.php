@@ -1,28 +1,22 @@
 <?php
 declare(strict_types = 1);
 require_once __DIR__ . '/../boot.php';
-
-$getParams = $_GET;
+$currentPage = 'main';
 $uri = substr($_SERVER['REQUEST_URI'], 1);
-$referenceLogo = array_keys(getFixedPages())[0];
-$mainPageAdress = getPageAdressById(1);
-$favPageAdress = getPageAdressById(2);
-$mainPageName = mb_strtoupper(getPageNameById(1));
-$favPageName = mb_strtoupper(getPageNameById(2));
 
-$selectedMovies = [];
-
-if (isset($getParams['genre']) && isset(getMovieGernes()[$getParams['genre']]))
+if ($uri !== '' && isset(getGernes()[$uri]))
 {
-	$selectedMovies = getFilteredMoviesByGenres(getMovieGernes()[$getParams['genre']]);
+	$selectedMovies = getMovies($uri);
+	$currentPage = $uri;
+}
+if (isset($_GET['q']))
+{
+	$selectedMovies = getMovies(null, $_GET['q']);
+	$currentPage = null;
 }
 else
 {
 	$selectedMovies = getMovies();
-}
-if (isset($getParams['q']))
-{
-	$selectedMovies = searchMovies($selectedMovies, $getParams['q']);
 }
 
 echo view('layout', [
@@ -30,13 +24,9 @@ echo view('layout', [
 		['selectedMovies' => $selectedMovies]),
 	'menuContent' => view('components/common/menu',
 		[
-			'genre' => $getParams['genre'] ?? null,
-			'uri' => $uri,
-			'mainPageAdress' => $mainPageAdress,
-			'favPageAdress' => $favPageAdress,
-			'mainPageName' => $mainPageName,
-			'favPageName' => $favPageName,
-
+			'currentPage' => $currentPage,
+			'menuItem' => getMenuItem(),
 		]),
-	'referenceLogo' => $referenceLogo,
+	'referenceLogo' => array_keys(getFixedPages()[0])[0],
+	'rating' => null,
 ]);

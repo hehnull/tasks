@@ -1,5 +1,5 @@
 <?php
-/** @var string $selectedMovies */
+/** @var array $selectedMovies */
 ?>
 
 <div class="content">
@@ -9,9 +9,12 @@
 	{
 		echo '<div class="not-found"> Ничего не найдено!</div>';
 	}
-	foreach ($selectedMovies as $movie)
+	else
 	{
-		echo view('components/main-page/card-output', ['movie' => $movie]);
+		foreach ($selectedMovies as $movie)
+		{
+			echo view('components/main-page/card-output', ['movie' => $movie]);
+		}
 	}
 	?>
 </div>

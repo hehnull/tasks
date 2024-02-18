@@ -7,9 +7,8 @@ function searchMovies(array $movies, string $desiredMovie): array
 
 	foreach ($movies as $movie)
 	{
-		$isFirstMatching = mb_stripos($desiredMovie, $movie['title']);
-		$isSecondMatching = mb_stripos($movie['title'], $desiredMovie);
-		if ($isFirstMatching !== false || $isSecondMatching === 0)
+		$isMatching = mb_stripos($movie['title'], $desiredMovie);
+		if ($isMatching === 0)
 		{
 			$filteredMovies[] = $movie;
 		}

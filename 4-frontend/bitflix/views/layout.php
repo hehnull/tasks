@@ -1,10 +1,9 @@
 <?php
 /**
- * @var string $outputContent ?? null
+ * @var string $outputContent
  * @var string $menuContent
  * @var string $referenceLogo
- * @var int $partRatingPercent
- * @var int $wholeRatingPercent
+ * @var string $rating
  */
 ?>
 
@@ -21,13 +20,7 @@
 	<meta charset="UTF-8">
 	<title>Title</title>
 	<style>
-		.graph-rating :nth-child(-n+<?= $wholeRatingPercent ?>) {
-			background-color: #E78818;
-		}
-
-		.graph-rating :nth-child(<?= $wholeRatingPercent+1 ?>) {
-			background: linear-gradient(to right, #E78818 0%, #E78818 <?=$partRatingPercent?>%, #F2F2F2 <?=$partRatingPercent?>%, #F2F2F2 100%);
-		}
+		<?= $rating ?>
 	</style>
 </head>
 <body>

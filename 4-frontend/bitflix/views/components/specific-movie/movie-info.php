@@ -1,7 +1,6 @@
 <?php
 /**
  * @var array $selectedMovie
- * @var int $amountActors
  */
 
 ?>
@@ -51,13 +50,7 @@
 					<div class="values">
 						<div class="value"><?= $selectedMovie['release-date'] ?></div>
 						<div class="value"><?= $selectedMovie['director'] ?></div>
-						<div class="value"><?php
-							foreach ($selectedMovie['cast'] as $key => $actor) {
-								echo $actor;
-								if ($key !== $amountActors - 1) {
-									echo ", ";
-								}
-							} ?></div>
+						<div class="value"><?= implode(', ', $selectedMovie['cast']) ?></div>
 					</div>
 				</div>
 				<div class="mini-header">Описание</div>
