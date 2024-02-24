@@ -6,10 +6,10 @@ $uri = substr($_SERVER['REQUEST_URI'], 1);
 
 if ($uri !== '' && isset(getGernes()[$uri]))
 {
-	$selectedMovies = getMovies($uri);
+	$selectedMovies = getMovies(getGernes()[$uri]);
 	$currentPage = $uri;
 }
-if (isset($_GET['q']))
+elseif (isset($_GET['q']))
 {
 	$selectedMovies = getMovies(null, $_GET['q']);
 	$currentPage = null;
@@ -27,6 +27,5 @@ echo view('layout', [
 			'currentPage' => $currentPage,
 			'menuItem' => getMenuItem(),
 		]),
-	'referenceLogo' => array_keys(getFixedPages()[0])[0],
-	'rating' => null,
+	'referenceLogo' => getPagesOption('uri_for_logo'),
 ]);

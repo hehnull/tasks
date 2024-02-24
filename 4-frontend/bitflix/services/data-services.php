@@ -13,9 +13,13 @@ function extractData(string $dataPath)
 	return $receivedAllPaths[$dataPath];
 }
 
-function getFixedPages()
+function getPagesOption(?string $option = null)
 {
 	[$fixedPages,] = extractData(ROOT . '/config.php');
+	if (isset($option))
+	{
+		return $fixedPages[$option];
+	}
 	return $fixedPages;
 }
 
@@ -43,10 +47,26 @@ function getMovies(?string $genre = null, ?string $searchString = null): array
 {
 	/** @var array $movies */
 	require getPathToMoviesData();
+
+	if (isset($genre) && isset($searchString))
+	{
+		$filteredMovies = [];
+		foreach ($movies as $movie)
+		{
+			if (in_array($genre, $movie['genres'], true))
+			{
+				$filteredMovies[] = $movie;
+			}
+		}
+		return array_intersect_assoc($filteredMovies, searchMovies($movies, $searchString));
+	}
+	if (isset($searchString))
+	{
+		return searchMovies($movies, $searchString);
+	}
 	if (isset($genre))
 	{
 		$filteredMovies = [];
-
 		foreach ($movies as $movie)
 		{
 			if (in_array($genre, $movie['genres'], true))
@@ -56,11 +76,20 @@ function getMovies(?string $genre = null, ?string $searchString = null): array
 		}
 		return $filteredMovies;
 	}
-	if (isset($searchString))
-	{
-		return searchMovies($movies, $_GET['q']);
-	}
 	return $movies;
+}
+
+function getMovieById(string $id)
+{
+	/** @var array $movies */
+	require getPathToMoviesData();
+	foreach (getMovies() as $movie)
+	{
+		if ($movie['id'] === (int)$id)
+		{
+			return $movie;
+		}
+	}
 }
 
 function toupperMenu($item)
@@ -70,5 +99,6 @@ function toupperMenu($item)
 
 function getMenuItem()
 {
-	return array_map('toUpperMenu', array_merge(getFixedPages()[0], getGernes(), getFixedPages()[1]));
+	return array_map('toUpperMenu',
+		array_merge(getPagesOption('firstPages'), getGernes(), getPagesOption('lastPages')));
 }

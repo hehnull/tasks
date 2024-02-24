@@ -20,7 +20,7 @@
 	<meta charset="UTF-8">
 	<title>Title</title>
 	<style>
-		<?= $rating ?>
+		<?= $rating ?? '' ?>
 	</style>
 </head>
 <body>

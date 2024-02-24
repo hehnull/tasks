@@ -12,6 +12,5 @@ echo view('layout', [
 			'currentPage' => $currentPage,
 			'menuItem' => getMenuItem(),
 		]),
-	'referenceLogo' => array_keys(getFixedPages()[0])[0],
-	'rating' => null,
+	'referenceLogo' => getPagesOption('uri_for_logo'),
 ]);
