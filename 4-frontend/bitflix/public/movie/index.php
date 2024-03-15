@@ -2,14 +2,17 @@
 declare(strict_types = 1);
 require_once __DIR__ . '/../../boot.php';
 
+
 $currentPage = null;
-$selectedMovie = getMovieById($_GET['id']);
+$selectedMovie = getDbMovieById($_GET['id']);
+
+
 if (empty($selectedMovie))
 {
 	header('Location: /');
 }
-$partRatingPercent = round(($selectedMovie['rating'] - floor($selectedMovie['rating'])) * 100);
-$wholeRatingPercent = floor($selectedMovie['rating']);
+$partRatingPercent = round(($selectedMovie['RATING'] - floor((int)$selectedMovie['RATING'])) * 100);
+$wholeRatingPercent = floor((int)$selectedMovie['RATING']);
 
 echo view('layout', [
 	'rating' => view('components/specific-movie/rating',
@@ -25,6 +28,6 @@ echo view('layout', [
 		'currentPage' => $currentPage,
 		'menuItem' => getMenuItem(),
 	]),
-	'referenceLogo' => getPagesOption('uri_for_logo'),
+	'referenceLogo' => getOptions('uri_for_logo'),
 
 ]);

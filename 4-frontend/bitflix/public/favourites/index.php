@@ -12,5 +12,5 @@ echo view('layout', [
 			'currentPage' => $currentPage,
 			'menuItem' => getMenuItem(),
 		]),
-	'referenceLogo' => getPagesOption('uri_for_logo'),
+	'referenceLogo' => getOptions('uri_for_logo'),
 ]);

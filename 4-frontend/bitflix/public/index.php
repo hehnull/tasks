@@ -4,20 +4,25 @@ require_once __DIR__ . '/../boot.php';
 $currentPage = 'main';
 $uri = substr($_SERVER['REQUEST_URI'], 1);
 
-if ($uri !== '' && isset(getGernes()[$uri]))
+if ($uri !== '' && isset(getDbGenresWithCodes()[$uri]))
 {
-	$selectedMovies = getMovies(getGernes()[$uri]);
+	$selectedMovies = getDbFilteredMovies(getDbGenresWithCodes()[$uri]);
 	$currentPage = $uri;
 }
 elseif (isset($_GET['q']))
 {
-	$selectedMovies = getMovies(null, $_GET['q']);
+	$selectedMovies = getDbFilteredMovies(null, $_GET['q']);
 	$currentPage = null;
 }
 else
 {
-	$selectedMovies = getMovies();
+	$selectedMovies = getDbFilteredMovies();
 }
+
+/*echo '<pre>';
+var_dump($selectedMovies);
+echo '</pre>';
+die;*/
 
 echo view('layout', [
 	'outputContent' => view('components/main-page/movie-output',
@@ -27,5 +32,5 @@ echo view('layout', [
 			'currentPage' => $currentPage,
 			'menuItem' => getMenuItem(),
 		]),
-	'referenceLogo' => getPagesOption('uri_for_logo'),
+	'referenceLogo' => getOptions('uri_for_logo'),
 ]);
